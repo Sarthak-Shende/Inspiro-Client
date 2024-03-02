@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Container, Grow, Grid } from "@mui/material";
+import inspiroLogo from "./images/Inspiro_only_logo.jpg";
+import Posts from "./components/posts/Posts";
+import Form from "./components/form/Form";
+import { StyledAppBar, Heading, Image } from "./Styles";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchPosts } from "./components/posts/PostsSlice";
 
 function App() {
-  const [count, setCount] = useState(0)
+	const dispatch = useDispatch();
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	useEffect(() => {
+		dispatch(fetchPosts());
+	},[]);
+
+	return (
+		<Container maxWidth="lg">
+			<StyledAppBar position="static" color="inherit">
+				<Heading variant="h2" align="center">
+					Inspiro
+				</Heading>
+				<Image src={inspiroLogo} alt="inspiro" height="60" />
+			</StyledAppBar>
+			<Grow in>
+				<Container>
+					<Grid
+						container
+						justify="space-between"
+						alignItems="stretch"
+						spacing="3"
+					>
+						<Grid item xs={12} sm={7}>
+							<Posts />
+						</Grid>
+
+						<Grid item xs={12} sm={4}>
+							<Form />
+						</Grid>
+					</Grid>
+				</Container>
+			</Grow>
+		</Container>
+	);
 }
 
-export default App
+export default App;
