@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchPostsAPI, createPostAPI } from "../../api/index";
+import {
+	fetchPostsAPI,
+	createPostAPI,
+	updatePostAPI,
+	deletePostAPI,
+	likePostAPI,
+} from "../../api/index";
 
 const initialState = {
 	posts: [],
@@ -9,13 +15,52 @@ const initialState = {
 };
 
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-	const response = await fetchPostsAPI();
-	return response.data;
+	try {
+		const response = await fetchPostsAPI();
+		//console.log(response.data);
+		return response;
+	} catch (error) {
+		console.log(error);
+	}
 });
 
 export const createPost = createAsyncThunk("posts/createPost", async (post) => {
-	const response = await createPostAPI(post);
-	return response.data;
+	try {
+		const response = await createPostAPI(post);
+		return response;
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+export const updatePost = createAsyncThunk(
+	"posts/updatePost",
+	async ({ id, updatedPost }) => {
+		try {
+			const response = await updatePostAPI({ id, updatedPost });
+			return response;
+		} catch (error) {
+			console.log(error);
+		}
+	}
+);
+
+export const deletePost = createAsyncThunk("posts/deletePost", async (id) => {
+	try {
+		await deletePostAPI(id);
+		return id;
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+export const likePost = createAsyncThunk("posts/likePost", async (id) => {
+	try {
+		const response = await likePostAPI(id);
+		return response;
+	} catch (error) {
+		console.log(error);
+	}
 });
 
 const postsSlice = createSlice({
@@ -43,11 +88,12 @@ const postsSlice = createSlice({
 			.addCase(fetchPosts.fulfilled, (state, action) => {
 				state.status = "succedded";
 				state.posts = action.payload;
+				//console.log(action.payload);
 				state.error = null;
 			})
 			.addCase(fetchPosts.rejected, (state, action) => {
 				state.status = "failed";
-				state.error = action.error.message;
+				state.error = action.error;
 			})
 			.addCase(createPost.pending, (state) => {
 				state.status = "loading";
@@ -59,7 +105,47 @@ const postsSlice = createSlice({
 			})
 			.addCase(createPost.rejected, (state, action) => {
 				state.status = "failed";
-				state.error = action.error.message;
+				state.error = action.error;
+			})
+			.addCase(updatePost.pending, (state) => {
+				state.status = "loading";
+			})
+			.addCase(updatePost.fulfilled, (state, action) => {
+				state.status = "succedded";
+				state.posts = state.posts.map((post) =>
+					post._id === action.payload._id ? action.payload : post
+				);
+				state.error = null;
+			})
+			.addCase(updatePost.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.error;
+			})
+			.addCase(deletePost.pending, (state) => {
+				state.status = "loading";
+			})
+			.addCase(deletePost.fulfilled, (state, action) => {
+				state.status = "succedded";
+				state.posts = state.posts.filter((post) => post._id !== action.payload);
+				state.error = null;
+			})
+			.addCase(deletePost.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.error;
+			})
+			.addCase(likePost.pending, (state) => {
+				state.status = "loading";
+			})
+			.addCase(likePost.fulfilled, (state, action) => {
+				state.status = "succedded";
+				state.posts = state.posts.map((post) =>
+					post._id === action.payload._id ? action.payload : post
+				);
+				state.error = null;
+			})
+			.addCase(likePost.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.error;
 			});
 	},
 });
@@ -67,4 +153,4 @@ const postsSlice = createSlice({
 export const {} = postsSlice.actions;
 export default postsSlice.reducer;
 
-export const selectAllPosts = (state) => state.posts.posts;
+export const selectAllPosts = (state) => state.posts;

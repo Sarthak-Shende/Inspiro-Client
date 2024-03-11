@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
+import { Card, CardMedia, Typography,CardActions } from "@mui/material";
 
-export const Media = styled.div`
+export const CardMediaStyled = styled(CardMedia)`
 	height: 0;
 	padding-top: 56.25%;
 	background-color: rgba(0, 0, 0, 0.5);
@@ -15,7 +16,7 @@ export const FullHeightCard = styled.div`
 	height: 100%;
 `;
 
-export const Card = styled.div`
+export const CardStyled = styled(Card)`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -48,11 +49,11 @@ export const Details = styled.div`
 	margin: 20px;
 `;
 
-export const Title = styled.div`
+export const Title = styled(Typography)`
 	padding: 0 16px;
 `;
 
-export const CardActions = styled.div`
+export const CardActionsStyled = styled(CardActions)`
 	padding: 0 16px 8px 16px;
 	display: flex;
 	justify-content: space-between;

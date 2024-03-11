@@ -4,15 +4,16 @@ import Posts from "./components/posts/Posts";
 import Form from "./components/form/Form";
 import { StyledAppBar, Heading, Image } from "./Styles";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchPosts } from "./components/posts/PostsSlice";
 
 function App() {
 	const dispatch = useDispatch();
+	const [currentId, setCurrentId] = useState(null);
 
 	useEffect(() => {
 		dispatch(fetchPosts());
-	},[]);
+	}, [currentId, dispatch]);
 
 	return (
 		<Container maxWidth="lg">
@@ -26,16 +27,17 @@ function App() {
 				<Container>
 					<Grid
 						container
+						sx={{ flexDirection: { xs: "column-reverse", sm:"row" } }}
 						justify="space-between"
 						alignItems="stretch"
 						spacing="3"
 					>
 						<Grid item xs={12} sm={7}>
-							<Posts />
+							<Posts setCurrentId={setCurrentId} />
 						</Grid>
 
 						<Grid item xs={12} sm={4}>
-							<Form />
+							<Form currentId={currentId} setCurrentId={setCurrentId} />
 						</Grid>
 					</Grid>
 				</Container>

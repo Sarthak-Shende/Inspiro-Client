@@ -1,16 +1,12 @@
 import { TextField, Button, Typography } from "@mui/material";
 import { FormContainer, FileInput, SubmitButton, PaperStyled } from "./Styles";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { createPost } from "../posts/PostsSlice";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createPost, updatePost } from "../posts/PostsSlice";
 
-const Form = () => {
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		dispatch(createPost(postData));
-	};
-	const clear = () => {};
+const Form = ({ currentId, setCurrentId }) => {
 	const dispatch = useDispatch();
+
 	const [postData, setPostData] = useState({
 		creator: "",
 		title: "",
@@ -18,6 +14,40 @@ const Form = () => {
 		tags: "",
 		selectedFile: "",
 	});
+
+	const post = useSelector((state) =>
+		currentId ? state.posts.posts.find((p) => p._id === currentId) : null
+	);
+
+	useEffect(() => {
+		if (post) {
+			setPostData(post);
+		}
+	}, [post]);
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		if (currentId) {
+			dispatch(updatePost({ id: currentId, updatedPost: postData }));
+			//console.log(postData);
+		} else {
+			dispatch(createPost(postData));
+		}
+
+		clear();
+	};
+
+	const clear = () => {
+		setCurrentId(null);
+		setPostData({
+			creator: "",
+			title: "",
+			message: "",
+			tags: "",
+			selectedFile: "",
+		});
+	};
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0];
@@ -31,7 +61,9 @@ const Form = () => {
 	return (
 		<PaperStyled>
 			<FormContainer autoComplete="off" noValidate onSubmit={handleSubmit}>
-				<Typography variant="h6">Create post</Typography>
+				<Typography variant="h6">
+					{currentId ? "Edit" : "Create"} post
+				</Typography>
 				<TextField
 					name="creator"
 					variant="outlined"
@@ -66,7 +98,9 @@ const Form = () => {
 					label="Tags"
 					fullWidth
 					value={postData.tags}
-					onChange={(e) => setPostData({ ...postData, tags: e.target.value })}
+					onChange={(e) =>
+						setPostData({ ...postData, tags: e.target.value.split(",") })
+					}
 				/>
 				<div>
 					<FileInput type="file" onChange={handleFileChange}></FileInput>
