@@ -10,12 +10,28 @@ import {
 	StyledAvatar,
 } from "./Styles";
 import inspiroLogo from "../../images/Inspiro_only_logo.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@mui/material";
-
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { logoutProfile } from "../auth/AuthSlice";
 
 const Navbar = () => {
-	const user = null;
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const location = useLocation();
+	const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+	useEffect(() => {
+		const googleToken = user?.jti;
+		setUser(JSON.parse(localStorage.getItem("profile")));
+	}, [location]);
+
+	const logout = () => {
+		dispatch(logoutProfile());
+		navigate("/");
+		setUser(null);
+	};
+
 	return (
 		<StyledAppBar position="static" color="inherit">
 			<BrandContainer>
@@ -27,11 +43,15 @@ const Navbar = () => {
 			<StyledToolbar>
 				{user ? (
 					<Profile>
-						<StyledAvatar alt={user.result.name} src={user.result.imageUrl}>
-							{user.result.name.charAt(0)}
+						<StyledAvatar alt={user.given_name} src={user.picture}>
+							{user.given_name.charAt(0)}
 						</StyledAvatar>
-						<Username variant="h6">{user.result.name}</Username>
-						<LogoutButton variant="contained" color="secondary">
+						<Username variant="h6">{user.name}</Username>
+						<LogoutButton
+							variant="contained"
+							color="secondary"
+							onClick={logout}
+						>
 							Logout
 						</LogoutButton>
 					</Profile>

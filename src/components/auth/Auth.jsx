@@ -3,18 +3,42 @@ import { Container, Typography, Grid, Button } from "@mui/material";
 import { StyledPaper, StyledAvatar, Form, SubmitButton } from "./Styles";
 import Input from "./Input";
 import LockIcon from "@mui/icons-material/Lock";
+import { GoogleLogin } from "@react-oauth/google";
+import { useDispatch } from "react-redux";
+import { jwtDecode } from "jwt-decode";
+import { fetchProfile } from "./AuthSlice";
+import { useNavigate } from "react-router-dom";
 
 const Auth = () => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [showPassword, setShowPassword] = useState(false);
 	const [isSignup, setIsSignup] = useState(false);
+
 	const handleSubmit = () => {};
 	const handleChange = () => {};
+
 	let handleShowPassword = () =>
 		setShowPassword((prevShowPassword) => !prevShowPassword);
 
 	const switchMode = () => {
 		setIsSignup((prevIsSignup) => !prevIsSignup);
 		handleShowPassword = false;
+	};
+
+	const googleSuccess = async (response) => {
+		const data = jwtDecode(response?.credential);
+
+		try {
+			dispatch(fetchProfile(data));
+			navigate("/");
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const googleFailure = (error) => {
+		console.log(error);
 	};
 
 	return (
@@ -72,6 +96,7 @@ const Auth = () => {
 					>
 						{isSignup ? "Sign Up" : "Sign In"}
 					</SubmitButton>
+					<GoogleLogin onSuccess={googleSuccess} onError={googleFailure} />
 					<Grid Container justify="flex-end">
 						<Grid item>
 							<Button onClick={switchMode}>
