@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const api = axios.create({
-	baseURL: "http://localhost:5000/posts",
+	baseURL: "http://localhost:5000",
 });
 
 export const fetchPostsAPI = async () => {
 	try {
-		const response = await api.get();
+		const response = await api.get("/posts");
 		return response.data;
 	} catch (error) {
 		console.error("Error fetching posts:", error);
@@ -15,7 +15,7 @@ export const fetchPostsAPI = async () => {
 
 export const createPostAPI = async (newPost) => {
 	try {
-		const response = await api.post("/", newPost);
+		const response = await api.post("/posts", newPost);
 		return response.data;
 	} catch (error) {
 		console.error("Error creating posts:", error);
@@ -24,7 +24,7 @@ export const createPostAPI = async (newPost) => {
 
 export const updatePostAPI = async ({ id, updatedPost }) => {
 	try {
-		const response = await api.patch(`/${id}`, updatedPost);
+		const response = await api.patch(`/posts/${id}`, updatedPost);
 		return response.data;
 	} catch (error) {
 		console.error("Error updating posts:", error);
@@ -33,7 +33,7 @@ export const updatePostAPI = async ({ id, updatedPost }) => {
 
 export const deletePostAPI = async (id) => {
 	try {
-		await api.delete(`/${id}`);
+		await api.delete(`/posts/${id}`);
 	} catch (error) {
 		console.error("Error deleting posts:", error);
 	}
@@ -41,9 +41,27 @@ export const deletePostAPI = async (id) => {
 
 export const likePostAPI = async (id) => {
 	try {
-		const response = await api.patch(`/${id}/likePost`);
+		const response = await api.patch(`/posts/${id}/likePost`);
 		return response.data;
 	} catch (error) {
 		console.error("Error updating posts:", error);
+	}
+};
+
+export const signinAPI = async (formData) => {
+	try {
+		const response = await api.post(`/user/signin`, formData);
+		return response.data;
+	} catch (error) {
+		console.error("Error in signing in:", error);
+	}
+};
+
+export const signupAPI = async (formData) => {
+	try {
+		const response = await api.post(`/user/signup`, formData);
+		return response.data;
+	} catch (error) {
+		console.error("Error in signing up:", error);
 	}
 };

@@ -20,7 +20,14 @@ const Navbar = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const location = useLocation();
-	const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+
+	const [user, setUser] = useState(
+		localStorage.getItem("profile") !== undefined
+			? JSON.parse(localStorage.getItem("profile"))
+			: null
+	);
+	console.log(user);
+
 	useEffect(() => {
 		const googleToken = user?.jti;
 		setUser(JSON.parse(localStorage.getItem("profile")));
@@ -43,8 +50,8 @@ const Navbar = () => {
 			<StyledToolbar>
 				{user ? (
 					<Profile>
-						<StyledAvatar alt={user.given_name} src={user.picture}>
-							{user.given_name.charAt(0)}
+						<StyledAvatar alt={user.name} src={user?.picture}>
+							{user.name.charAt(0)}
 						</StyledAvatar>
 						<Username variant="h6">{user.name}</Username>
 						<LogoutButton
