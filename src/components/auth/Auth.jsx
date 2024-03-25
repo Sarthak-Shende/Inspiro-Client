@@ -49,7 +49,8 @@ const Auth = () => {
 	};
 
 	const googleSuccess = async (response) => {
-		const data = jwtDecode(response?.credential);
+		let data = jwtDecode(response?.credential);
+		data.token=response?.credential;
 
 		try {
 			dispatch(fetchProfile(data));

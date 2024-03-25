@@ -13,7 +13,7 @@ export const signin = createAsyncThunk(
 	async (formData, navigate) => {
 		try {
 			const response = await signinAPI(formData);
-			console.log(response.result);
+			response.result.token=response.token;
 			return response.result;
 		} catch (error) {
 			console.log(error);
@@ -26,7 +26,7 @@ export const signup = createAsyncThunk(
 	async (formData, navigate) => {
 		try {
 			const response = await signupAPI(formData);
-			console.log(response);
+			response.result.token = response.token;
 			return response.result;
 		} catch (error) {
 			console.log(error);

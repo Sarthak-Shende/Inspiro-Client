@@ -8,12 +8,13 @@ const Form = ({ currentId, setCurrentId }) => {
 	const dispatch = useDispatch();
 
 	const [postData, setPostData] = useState({
-		creator: "",
 		title: "",
 		message: "",
 		tags: "",
 		selectedFile: "",
 	});
+
+	const user = JSON.parse(localStorage.getItem("profile"));
 
 	const post = useSelector((state) =>
 		currentId ? state.posts.posts.find((p) => p._id === currentId) : null
@@ -29,10 +30,14 @@ const Form = ({ currentId, setCurrentId }) => {
 		e.preventDefault();
 
 		if (currentId) {
-			dispatch(updatePost({ id: currentId, updatedPost: postData }));
-			//console.log(postData);
+			dispatch(
+				updatePost({
+					id: currentId,
+					updatedPost: { ...postData, name: user.name },
+				})
+			);
 		} else {
-			dispatch(createPost(postData));
+			dispatch(createPost({ ...postData, name: user.name }));
 		}
 
 		clear();
@@ -41,7 +46,6 @@ const Form = ({ currentId, setCurrentId }) => {
 	const clear = () => {
 		setCurrentId(null);
 		setPostData({
-			creator: "",
 			title: "",
 			message: "",
 			tags: "",
@@ -58,22 +62,22 @@ const Form = ({ currentId, setCurrentId }) => {
 		};
 	};
 
+	if (!user?.name) {
+		return (
+			<PaperStyled>
+				<Typography variant="h6" align="center">
+					Please Sign In to create post and like other's posts.
+				</Typography>
+			</PaperStyled>
+		);
+	}
+
 	return (
 		<PaperStyled>
 			<FormContainer autoComplete="off" noValidate onSubmit={handleSubmit}>
 				<Typography variant="h6">
 					{currentId ? "Edit" : "Create"} post
 				</Typography>
-				<TextField
-					name="creator"
-					variant="outlined"
-					label="Creator"
-					fullWidth
-					value={postData.creator}
-					onChange={(e) =>
-						setPostData({ ...postData, creator: e.target.value })
-					}
-				/>
 				<TextField
 					name="title"
 					variant="outlined"
@@ -95,7 +99,7 @@ const Form = ({ currentId, setCurrentId }) => {
 				<TextField
 					name="tags"
 					variant="outlined"
-					label="Tags"
+					label="Tags (comma seperated)"
 					fullWidth
 					value={postData.tags}
 					onChange={(e) =>

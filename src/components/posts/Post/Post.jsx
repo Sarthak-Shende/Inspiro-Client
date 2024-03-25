@@ -1,7 +1,8 @@
 import { CardContent, Button, Typography } from "@mui/material";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ThumbUpAltOutlined from "@mui/icons-material/ThumbUpAltOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import EditIcon from "@mui/icons-material/Edit";
 import {
 	CardStyled,
 	CardMediaStyled,
@@ -17,6 +18,33 @@ import { deletePost, likePost } from "../PostsSlice";
 
 const Post = ({ post, setCurrentId }) => {
 	const dispatch = useDispatch();
+	const user = JSON.parse(localStorage.getItem("profile"));
+
+	const Likes = () => {
+		if (post.likes.length > 0) {
+			return post.likes.find((like) => like === (user?.sub || user?._id)) ? (
+				<>
+					<ThumbUpAltIcon fontSize="small" />
+					&nbsp;
+					{post.likes.length > 2
+						? `You and ${post.likes.length - 1} others`
+						: `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
+				</>
+			) : (
+				<>
+					<ThumbUpAltOutlined fontSize="small" />
+					&nbsp;{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
+				</>
+			);
+		}
+
+		return (
+			<>
+				<ThumbUpAltOutlined fontSize="small" />
+				&nbsp;Like
+			</>
+		);
+	};
 
 	return (
 		<CardStyled>
@@ -25,19 +53,22 @@ const Post = ({ post, setCurrentId }) => {
 				title={post.title}
 			></CardMediaStyled>
 			<Overlay>
-				<Typography variant="h6">{post.creator}</Typography>
+				<Typography variant="h6">{post.name}</Typography>
 				<Typography variant="body2">
 					{moment(post.createdAt).fromNow()}
 				</Typography>
 			</Overlay>
 			<Overlay2>
-				<Button
-					style={{ color: "white" }}
-					size="small"
-					onClick={() => setCurrentId(post._id)}
-				>
-					<MoreHorizIcon fontSize="default" />
-				</Button>
+				{(user?.sub === post.creator || user?._id === post.creator) && (
+					<Button
+						style={{ color: "white" }}
+						size="small"
+						onClick={() => setCurrentId(post._id)}
+					>
+						<EditIcon fontSize="small" />
+						&nbsp;Edit
+					</Button>
+				)}
 			</Overlay2>
 			<Details>
 				<Typography variant="body2" color="textSecondary">
@@ -56,20 +87,21 @@ const Post = ({ post, setCurrentId }) => {
 				<Button
 					size="small"
 					color="primary"
+					disabled={!user?.name}
 					onClick={() => dispatch(likePost(post._id))}
 				>
-					<ThumbUpAltIcon fontSize="small" />
-					&nbsp; Like &nbsp;
-					{post.likeCount}
+					<Likes />
 				</Button>
-				<Button
-					size="small"
-					color="primary"
-					onClick={() => dispatch(deletePost(post._id))}
-				>
-					<DeleteIcon fontSize="small" />
-					Delete
-				</Button>
+				{(user?.sub === post.creator || user?._id === post.creator) && (
+					<Button
+						size="small"
+						color="primary"
+						onClick={() => dispatch(deletePost(post._id))}
+					>
+						<DeleteIcon fontSize="small" />
+						Delete
+					</Button>
+				)}
 			</CardActionsStyled>
 		</CardStyled>
 	);

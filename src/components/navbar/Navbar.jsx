@@ -26,10 +26,10 @@ const Navbar = () => {
 			? JSON.parse(localStorage.getItem("profile"))
 			: null
 	);
-	console.log(user);
+
 
 	useEffect(() => {
-		const googleToken = user?.jti;
+		//const googleToken = user?.jti;
 		setUser(JSON.parse(localStorage.getItem("profile")));
 	}, [location]);
 
