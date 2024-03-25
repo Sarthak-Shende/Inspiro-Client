@@ -15,6 +15,7 @@ import { Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { logoutProfile } from "../auth/AuthSlice";
+import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
 	const navigate = useNavigate();
@@ -27,9 +28,14 @@ const Navbar = () => {
 			: null
 	);
 
-
 	useEffect(() => {
-		//const googleToken = user?.jti;
+		const token = user?.token;
+		if (token) {
+			const decodedToken = jwtDecode(token);
+
+			if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+		}
+
 		setUser(JSON.parse(localStorage.getItem("profile")));
 	}, [location]);
 
