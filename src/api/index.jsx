@@ -23,6 +23,19 @@ export const fetchPostsAPI = async () => {
 	}
 };
 
+export const fetchPostsBySearchAPI = async (searchQuery) => {
+	try {
+		const response = await api.get(
+			`/posts/search?searchQuery=${searchQuery.search || "none"}&tags=${
+				searchQuery.tags
+			}`
+		);
+		return response.data;
+	} catch (error) {
+		console.error("Error fetching searched posts:", error);
+	}
+};
+
 export const createPostAPI = async (newPost) => {
 	try {
 		const response = await api.post("/posts", newPost);
