@@ -6,7 +6,6 @@ import { Grid, CircularProgress } from "@mui/material";
 
 const Posts = ({ setCurrentId }) => {
 	const { posts, status } = useSelector(selectAllPosts);
-	//console.log(posts);
 	if (status === "loading") {
 		return <CircularProgress></CircularProgress>;
 	} else if (status === "failed") {

@@ -5,6 +5,7 @@ import {
 	updatePostAPI,
 	deletePostAPI,
 	likePostAPI,
+	fetchPostsBySearchAPI,
 } from "../../api/index";
 
 const initialState = {
@@ -17,12 +18,24 @@ const initialState = {
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
 	try {
 		const response = await fetchPostsAPI();
-		//console.log(response.data);
 		return response;
 	} catch (error) {
 		console.log(error);
 	}
 });
+
+export const fetchPostsBySearch = createAsyncThunk(
+	"posts/fetchPostsBySearch",
+	async (searchQuery) => {
+		try {
+			const response = await fetchPostsBySearchAPI();
+			//console.log(response.data);
+			return response;
+		} catch (error) {
+			console.log(error);
+		}
+	}
+);
 
 export const createPost = createAsyncThunk("posts/createPost", async (post) => {
 	try {
