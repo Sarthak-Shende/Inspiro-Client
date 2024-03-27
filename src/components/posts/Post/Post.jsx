@@ -47,7 +47,7 @@ const Post = ({ post, setCurrentId }) => {
 	};
 
 	return (
-		<CardStyled>
+		<CardStyled raised elevation={5}>
 			<CardMediaStyled
 				image={post.selectedFile}
 				title={post.title}
