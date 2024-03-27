@@ -17,9 +17,8 @@ import Pagination from "../pagination/Pagination";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function useQuery() {
-	return new URLSearchParams(useLocation.search);
+	return new URLSearchParams(useLocation().search);
 }
-
 const Home = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -30,11 +29,6 @@ const Home = () => {
 
 	const page = query.get("page") || 1;
 	const searchQuery = query.get("searchQuery");
-
-	useEffect(() => {
-		dispatch(fetchPosts());
-	}, [currentId, dispatch]);
-
 	const handleKeyPressSearch = (e) => {
 		if (e.key === "Enter") {
 			searchPost();
@@ -120,7 +114,7 @@ const Home = () => {
 						</StyledAppBar>
 						<Form currentId={currentId} setCurrentId={setCurrentId} />
 						<Paper elevation={6}>
-							<Pagination />
+							<Pagination page={page} />
 						</Paper>
 					</Grid>
 				</Grid>

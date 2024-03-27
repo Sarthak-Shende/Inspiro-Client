@@ -1,11 +1,11 @@
 import React from "react";
 import Post from "./Post/Post";
 import { useSelector } from "react-redux";
-import { selectAllPosts } from "./PostsSlice";
+import { selectPosts } from "./PostsSlice";
 import { Grid, CircularProgress } from "@mui/material";
 
 const Posts = ({ setCurrentId }) => {
-	const { posts, status } = useSelector(selectAllPosts);
+	const { posts, status } = useSelector(selectPosts);
 	if (status === "loading") {
 		return <CircularProgress></CircularProgress>;
 	} else if (status === "failed") {

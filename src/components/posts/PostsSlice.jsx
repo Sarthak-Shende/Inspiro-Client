@@ -10,14 +10,17 @@ import {
 
 const initialState = {
 	posts: [],
+	page: null,
+	numberOfPages: null,
 	status: "idle",
 	error: null, // Your initial state value
 	// ...other state properties if needed
 };
 
-export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
+export const fetchPosts = createAsyncThunk("posts/fetchPosts", async (page) => {
 	try {
-		const response = await fetchPostsAPI();
+		const response = await fetchPostsAPI(page);
+		//console.log(response);
 		return response;
 	} catch (error) {
 		console.log(error);
@@ -100,8 +103,9 @@ const postsSlice = createSlice({
 			})
 			.addCase(fetchPosts.fulfilled, (state, action) => {
 				state.status = "succedded";
-				state.posts = action.payload;
-				//console.log(action.payload);
+				state.posts = action.payload.data;
+				state.page = action.payload.currentPage;
+				state.numberOfPages = action.payload.numberOfPages;
 				state.error = null;
 			})
 			.addCase(fetchPosts.rejected, (state, action) => {
@@ -114,7 +118,6 @@ const postsSlice = createSlice({
 			.addCase(fetchPostsBySearch.fulfilled, (state, action) => {
 				state.status = "succedded";
 				state.posts = action.payload;
-				//console.log(action.payload);
 				state.error = null;
 			})
 			.addCase(fetchPostsBySearch.rejected, (state, action) => {
@@ -179,4 +182,4 @@ const postsSlice = createSlice({
 export const {} = postsSlice.actions;
 export default postsSlice.reducer;
 
-export const selectAllPosts = (state) => state.posts;
+export const selectPosts = (state) => state.posts;

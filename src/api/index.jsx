@@ -14,9 +14,9 @@ api.interceptors.request.use((req) => {
 	return req;
 });
 
-export const fetchPostsAPI = async () => {
+export const fetchPostsAPI = async ({ page }) => {
 	try {
-		const response = await api.get("/posts");
+		const response = await api.get(`/posts?page=${page}`);
 		return response.data;
 	} catch (error) {
 		console.error("Error fetching posts:", error);
