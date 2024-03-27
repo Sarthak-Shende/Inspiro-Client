@@ -28,8 +28,8 @@ export const fetchPostsBySearch = createAsyncThunk(
 	"posts/fetchPostsBySearch",
 	async (searchQuery) => {
 		try {
-			const response = await fetchPostsBySearchAPI();
-			//console.log(response.data);
+			const response = await fetchPostsBySearchAPI(searchQuery);
+			//console.log(response);
 			return response;
 		} catch (error) {
 			console.log(error);
@@ -105,6 +105,19 @@ const postsSlice = createSlice({
 				state.error = null;
 			})
 			.addCase(fetchPosts.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.error;
+			})
+			.addCase(fetchPostsBySearch.pending, (state) => {
+				state.status = "loading";
+			})
+			.addCase(fetchPostsBySearch.fulfilled, (state, action) => {
+				state.status = "succedded";
+				state.posts = action.payload;
+				//console.log(action.payload);
+				state.error = null;
+			})
+			.addCase(fetchPostsBySearch.rejected, (state, action) => {
 				state.status = "failed";
 				state.error = action.error;
 			})

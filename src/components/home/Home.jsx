@@ -4,7 +4,6 @@ import {
 	Grid,
 	Paper,
 	TextField,
-	Button,
 	Chip,
 	Box,
 } from "@mui/material";
@@ -58,8 +57,11 @@ const Home = () => {
 	};
 
 	const searchPost = () => {
-		if (search.trim()) {
+		if (search.trim() || tags) {
 			dispatch(fetchPostsBySearch({ search, tags: tags.join(",") }));
+			navigate(
+				`/posts/search?searchQuery=${search || "none"}&tags=${tags.join(",")}`
+			);
 		} else {
 			navigate("/");
 		}
