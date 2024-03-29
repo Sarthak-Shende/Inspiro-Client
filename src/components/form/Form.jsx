@@ -73,7 +73,7 @@ const Form = ({ currentId, setCurrentId }) => {
 	}
 
 	return (
-		<PaperStyled>
+		<PaperStyled elevation={6}>
 			<FormContainer autoComplete="off" noValidate onSubmit={handleSubmit}>
 				<Typography variant="h6">
 					{currentId ? "Edit" : "Create"} post

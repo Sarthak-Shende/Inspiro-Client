@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
+	fetchPostAPI,
 	fetchPostsAPI,
 	createPostAPI,
 	updatePostAPI,
@@ -10,12 +11,23 @@ import {
 
 const initialState = {
 	posts: [],
+	post: null,
 	page: null,
 	numberOfPages: null,
 	status: "idle",
 	error: null, // Your initial state value
 	// ...other state properties if needed
 };
+
+export const fetchPost = createAsyncThunk("posts/fetchPost", async (id) => {
+	try {
+		const response = await fetchPostAPI(id);
+		//console.log(response);
+		return response;
+	} catch (error) {
+		console.log(error);
+	}
+});
 
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async (page) => {
 	try {
@@ -98,6 +110,18 @@ const postsSlice = createSlice({
 	},
 	extraReducers(builder) {
 		builder
+			.addCase(fetchPost.pending, (state) => {
+				state.status = "loading";
+			})
+			.addCase(fetchPost.fulfilled, (state, action) => {
+				state.status = "succedded";
+				state.post = action.payload;
+				state.error = null;
+			})
+			.addCase(fetchPost.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.error;
+			})
 			.addCase(fetchPosts.pending, (state) => {
 				state.status = "loading";
 			})

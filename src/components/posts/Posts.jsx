@@ -6,6 +6,9 @@ import { Grid, CircularProgress } from "@mui/material";
 
 const Posts = ({ setCurrentId }) => {
 	const { posts, status } = useSelector(selectPosts);
+	if (status === "succedded" && !posts) {
+		return <p>No Posts</p>;
+	}
 	if (status === "loading") {
 		return <CircularProgress></CircularProgress>;
 	} else if (status === "failed") {
@@ -13,7 +16,7 @@ const Posts = ({ setCurrentId }) => {
 	}
 	if (posts) {
 		return (
-			<Grid className="" container alignItems="stretch" spacing={3}>
+			<Grid container alignItems="stretch" spacing={3}>
 				{posts.map((post) => (
 					<Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
 						<Post post={post} setCurrentId={setCurrentId}></Post>

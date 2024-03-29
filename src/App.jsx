@@ -1,9 +1,9 @@
 import { Container } from "@mui/material";
 import Navbar from "./components/navbar/Navbar";
 import Home from "./components/home/Home";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Auth from "./components/auth/Auth";
 import PostDetails from "./components/post details/PostDetails";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
 	const user = JSON.parse(localStorage.getItem("profile"));

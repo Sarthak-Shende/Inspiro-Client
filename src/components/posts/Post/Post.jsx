@@ -11,14 +11,21 @@ import {
 	Details,
 	Title,
 	CardActionsStyled,
+	ButtonBaseStyled,
 } from "./Styles";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { deletePost, likePost } from "../PostsSlice";
+import { useNavigate } from "react-router-dom";
 
 const Post = ({ post, setCurrentId }) => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const user = JSON.parse(localStorage.getItem("profile"));
+
+	const openPost = () => {
+		navigate(`${post._id}`);
+	};
 
 	const Likes = () => {
 		if (post.likes.length > 0) {
@@ -48,41 +55,43 @@ const Post = ({ post, setCurrentId }) => {
 
 	return (
 		<CardStyled raised elevation={5}>
-			<CardMediaStyled
-				image={post.selectedFile}
-				title={post.title}
-			></CardMediaStyled>
-			<Overlay>
-				<Typography variant="h6">{post.name}</Typography>
-				<Typography variant="body2">
-					{moment(post.createdAt).fromNow()}
-				</Typography>
-			</Overlay>
-			<Overlay2>
-				{(user?.sub === post.creator || user?._id === post.creator) && (
-					<Button
-						style={{ color: "white" }}
-						size="small"
-						onClick={() => setCurrentId(post._id)}
-					>
-						<EditIcon fontSize="small" />
-						&nbsp;Edit
-					</Button>
-				)}
-			</Overlay2>
-			<Details>
-				<Typography variant="body2" color="textSecondary">
-					{post.tags.map((tag) => `#${tag} `)}
-				</Typography>
-			</Details>
-			<Title variant="h5" gutterBottom>
-				{post.title}
-			</Title>
-			<CardContent>
-				<Title variant="body2" color="textSecondary" component="p">
-					{post.message}
+			<ButtonBaseStyled onClick={openPost}>
+				<CardMediaStyled
+					image={post.selectedFile}
+					title={post.title}
+				></CardMediaStyled>
+				<Overlay>
+					<Typography variant="h6">{post.name}</Typography>
+					<Typography variant="body2">
+						{moment(post.createdAt).fromNow()}
+					</Typography>
+				</Overlay>
+				<Overlay2>
+					{(user?.sub === post.creator || user?._id === post.creator) && (
+						<Button
+							style={{ color: "white" }}
+							size="small"
+							onClick={() => setCurrentId(post._id)}
+						>
+							<EditIcon fontSize="small" />
+							&nbsp;Edit
+						</Button>
+					)}
+				</Overlay2>
+				<Details>
+					<Typography variant="body2" color="textSecondary">
+						{post.tags.map((tag) => `#${tag} `)}
+					</Typography>
+				</Details>
+				<Title variant="h5" gutterBottom>
+					{post.title}
 				</Title>
-			</CardContent>
+				<CardContent>
+					<Title variant="body2" color="textSecondary" component="p">
+						{post.message}
+					</Title>
+				</CardContent>
+			</ButtonBaseStyled>
 			<CardActionsStyled>
 				<Button
 					size="small"
