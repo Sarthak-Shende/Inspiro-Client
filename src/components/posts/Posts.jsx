@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectPosts } from "./PostsSlice";
 import { Grid, CircularProgress } from "@mui/material";
 
-const Posts = ({ setCurrentId }) => {
+const Posts = () => {
 	const { posts, status } = useSelector(selectPosts);
 	if (status === "succedded" && !posts) {
 		return <p>No Posts</p>;
@@ -19,7 +19,7 @@ const Posts = ({ setCurrentId }) => {
 			<Grid container alignItems="stretch" spacing={3}>
 				{posts.map((post) => (
 					<Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
-						<Post post={post} setCurrentId={setCurrentId}></Post>
+						<Post post={post}></Post>
 					</Grid>
 				))}
 			</Grid>

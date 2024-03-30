@@ -2,8 +2,18 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchPost, selectPosts } from "../posts/PostsSlice";
-import { CircularProgress, Paper, Typography, Divider } from "@mui/material";
+import {
+	fetchPost,
+	selectPosts,
+	fetchPostsBySearch,
+} from "../posts/PostsSlice";
+import {
+	CircularProgress,
+	Paper,
+	Typography,
+	Divider,
+	Grid,
+} from "@mui/material";
 import {
 	StyledCard,
 	StyledSection,
@@ -11,15 +21,25 @@ import {
 	StyledImg,
 	LoadingPaper,
 } from "./Styles";
+import Post from "../posts/Post/Post";
 
 const PostDetails = () => {
 	const { post, posts, status } = useSelector(selectPosts);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { id } = useParams();
+
 	useEffect(() => {
 		dispatch(fetchPost(id));
 	}, [id]);
+
+	useEffect(() => {
+		if (post) {
+			dispatch(
+				fetchPostsBySearch({ search: "none", tags: post?.tags.join(",") })
+			);
+		}
+	}, [post]);
 
 	if (!post) return null;
 
@@ -30,6 +50,9 @@ const PostDetails = () => {
 			</LoadingPaper>
 		);
 	}
+
+	const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
+
 	return (
 		<Paper>
 			<StyledCard>
@@ -72,6 +95,16 @@ const PostDetails = () => {
 					/>
 				</StyledImageSection>
 			</StyledCard>
+			{recommendedPosts && (
+				<Grid container alignItems="stretch" spacing={3}>
+					{recommendedPosts.map((post) => (
+						<Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
+							<Post post={post}></Post>
+						</Grid>
+						//setCurrentId={setCurrentId}
+					))}
+				</Grid>
+			)}
 		</Paper>
 	);
 };

@@ -14,6 +14,7 @@ const initialState = {
 	post: null,
 	page: null,
 	numberOfPages: null,
+	id: null,
 	status: "idle",
 	error: null, // Your initial state value
 	// ...other state properties if needed
@@ -52,14 +53,19 @@ export const fetchPostsBySearch = createAsyncThunk(
 	}
 );
 
-export const createPost = createAsyncThunk("posts/createPost", async (post) => {
-	try {
-		const response = await createPostAPI(post);
-		return response;
-	} catch (error) {
-		console.log(error);
+export const createPost = createAsyncThunk(
+	"posts/createPost",
+	async ({ post, navigate }) => {
+		try {
+			const response = await createPostAPI(post);
+			console.log(navigate);
+			navigate(`/posts/${response._id}`);
+			return response;
+		} catch (error) {
+			console.log(error);
+		}
 	}
-});
+);
 
 export const updatePost = createAsyncThunk(
 	"posts/updatePost",
@@ -106,6 +112,9 @@ const postsSlice = createSlice({
 		},
 		incrementByAmount(state, action) {
 			state.value += action.payload;
+		},
+		setId(state, action) {
+			state.id = action.payload;
 		},
 	},
 	extraReducers(builder) {
@@ -203,7 +212,7 @@ const postsSlice = createSlice({
 	},
 });
 
-export const {} = postsSlice.actions;
+export const { setId } = postsSlice.actions;
 export default postsSlice.reducer;
 
 export const selectPosts = (state) => state.posts;

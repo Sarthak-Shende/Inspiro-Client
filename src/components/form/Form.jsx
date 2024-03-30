@@ -2,10 +2,15 @@ import { TextField, Button, Typography } from "@mui/material";
 import { FormContainer, FileInput, SubmitButton, PaperStyled } from "./Styles";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createPost, updatePost } from "../posts/PostsSlice";
+import { createPost, selectPosts, updatePost } from "../posts/PostsSlice";
+import { setId } from "../posts/PostsSlice";
+import { useNavigate } from "react-router-dom";
 
-const Form = ({ currentId, setCurrentId }) => {
+const Form = () => {
+	//{ currentId, setCurrentId }
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { id } = useSelector(selectPosts);
 
 	const [postData, setPostData] = useState({
 		title: "",
@@ -17,7 +22,7 @@ const Form = ({ currentId, setCurrentId }) => {
 	const user = JSON.parse(localStorage.getItem("profile"));
 
 	const post = useSelector((state) =>
-		currentId ? state.posts.posts.find((p) => p._id === currentId) : null
+		id ? state.posts.posts.find((p) => p._id === id) : null
 	);
 
 	useEffect(() => {
@@ -29,22 +34,22 @@ const Form = ({ currentId, setCurrentId }) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		if (currentId) {
+		if (id) {
 			dispatch(
 				updatePost({
-					id: currentId,
+					id: id,
 					updatedPost: { ...postData, name: user.name },
 				})
 			);
 		} else {
-			dispatch(createPost({ ...postData, name: user.name }));
+			dispatch(createPost({post:{ ...postData, name: user.name },navigate}));
 		}
 
 		clear();
 	};
 
 	const clear = () => {
-		setCurrentId(null);
+		dispatch(setId(null));
 		setPostData({
 			title: "",
 			message: "",
@@ -75,9 +80,7 @@ const Form = ({ currentId, setCurrentId }) => {
 	return (
 		<PaperStyled elevation={6}>
 			<FormContainer autoComplete="off" noValidate onSubmit={handleSubmit}>
-				<Typography variant="h6">
-					{currentId ? "Edit" : "Create"} post
-				</Typography>
+				<Typography variant="h6">{id ? "Edit" : "Create"} post</Typography>
 				<TextField
 					name="title"
 					variant="outlined"

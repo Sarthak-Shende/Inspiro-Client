@@ -17,14 +17,16 @@ import moment from "moment";
 import { useDispatch } from "react-redux";
 import { deletePost, likePost } from "../PostsSlice";
 import { useNavigate } from "react-router-dom";
+import { setId } from "../PostsSlice";
 
-const Post = ({ post, setCurrentId }) => {
+const Post = ({ post}) => {
+	//, setCurrentId
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const user = JSON.parse(localStorage.getItem("profile"));
 
 	const openPost = () => {
-		navigate(`${post._id}`);
+		navigate(`/posts/${post._id}`);
 	};
 
 	const Likes = () => {
@@ -71,7 +73,7 @@ const Post = ({ post, setCurrentId }) => {
 						<Button
 							style={{ color: "white" }}
 							size="small"
-							onClick={() => setCurrentId(post._id)}
+							onClick={() => dispatch(setId(post._id))}
 						>
 							<EditIcon fontSize="small" />
 							&nbsp;Edit
