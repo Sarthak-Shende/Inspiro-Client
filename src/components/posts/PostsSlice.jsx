@@ -7,6 +7,7 @@ import {
 	deletePostAPI,
 	likePostAPI,
 	fetchPostsBySearchAPI,
+	commentPostAPI,
 } from "../../api/index";
 
 const initialState = {
@@ -96,6 +97,18 @@ export const likePost = createAsyncThunk("posts/likePost", async (id) => {
 		console.log(error);
 	}
 });
+
+export const commentPost = createAsyncThunk(
+	"posts/commentPost",
+	async ({ value, id }) => {
+		try {
+			const response = await commentPostAPI({ value, id });
+			return response;
+		} catch (error) {
+			console.log(error);
+		}
+	}
+);
 
 const postsSlice = createSlice({
 	name: "posts", // A unique name for this slice of state
@@ -206,6 +219,21 @@ const postsSlice = createSlice({
 				state.error = null;
 			})
 			.addCase(likePost.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.error;
+			})
+			.addCase(commentPost.pending, (state) => {
+				state.status = "loading";
+			})
+			.addCase(commentPost.fulfilled, (state, action) => {
+				state.status = "succedded";
+				state.posts = state.posts.map((post) =>
+					post._id === action.payload._id ? action.payload : post
+				);
+				state.post = action.payload;
+				state.error = null;
+			})
+			.addCase(commentPost.rejected, (state, action) => {
 				state.status = "failed";
 				state.error = action.error;
 			});

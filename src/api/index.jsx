@@ -80,6 +80,15 @@ export const likePostAPI = async (id) => {
 	}
 };
 
+export const commentPostAPI = async ({ value, id }) => {
+	try {
+		const response = await api.post(`/posts/${id}/commentPost`, { value });
+		return response.data;
+	} catch (error) {
+		console.error("Error updating posts:", error);
+	}
+};
+
 export const signinAPI = async (formData) => {
 	try {
 		const response = await api.post(`/user/signin`, formData);

@@ -22,6 +22,7 @@ import {
 	LoadingPaper,
 } from "./Styles";
 import Post from "../posts/Post/Post";
+import CommentSection from "./CommentSection";
 
 const PostDetails = () => {
 	const { post, posts, status } = useSelector(selectPosts);
@@ -80,9 +81,7 @@ const PostDetails = () => {
 						<strong>Realtime Chat - coming soon!</strong>
 					</Typography>
 					<Divider style={{ margin: "20px 0" }} />
-					<Typography variant="body1">
-						<strong>Comments - coming soon!</strong>
-					</Typography>
+					<CommentSection></CommentSection>
 					<Divider style={{ margin: "20px 0" }} />
 				</StyledSection>
 				<StyledImageSection>

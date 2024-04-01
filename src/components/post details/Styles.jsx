@@ -39,6 +39,17 @@ export const StyledImg = styled.img`
 	maxheight: "600px";
 `;
 
+export const CommentsOuterContainer = styled.div`
+	display: "flex";
+	justifycontent: "space-between";
+`;
+
+export const CommentsInnerContainer = styled.div`
+	height: "200px";
+	overflowy: "auto";
+	marginright: "30px";
+`;
+
 /* 
 media: {
     borderRadius: '20px',
@@ -75,4 +86,13 @@ media: {
   loadingPaper: {
     display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px', borderRadius: '15px', height: '39vh',
   },
+  commentsOuterContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  commentsInnerContainer: {
+    height: '200px',
+    overflowY: 'auto',
+    marginRight: '30px',
+  }
 */
