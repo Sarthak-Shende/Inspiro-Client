@@ -1,4 +1,5 @@
-import { CardContent, Button, Typography } from "@mui/material";
+import { useState } from "react";
+import { CardContent, Button, Typography, CardActionArea } from "@mui/material";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpAltOutlined from "@mui/icons-material/ThumbUpAltOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -11,7 +12,6 @@ import {
 	Details,
 	Title,
 	CardActionsStyled,
-	ButtonBaseStyled,
 } from "./Styles";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -19,30 +19,40 @@ import { deletePost, likePost } from "../PostsSlice";
 import { useNavigate } from "react-router-dom";
 import { setId } from "../PostsSlice";
 
-const Post = ({ post}) => {
-	//, setCurrentId
+const Post = ({ post }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const user = JSON.parse(localStorage.getItem("profile"));
-
+	const [likes, setLikes] = useState(post?.likes);
+	const userId = user?.sub || user?._id;
+	const hasLikedPost = post.likes.find((like) => like === userId);
 	const openPost = () => {
 		navigate(`/posts/${post._id}`);
 	};
 
+	const handleLike = async () => {
+		dispatch(likePost(post._id));
+		if (hasLikedPost) {
+			setLikes(post.likes.filter((id) => id !== userId));
+		} else {
+			setLikes([...post.likes, userId]);
+		}
+	};
+
 	const Likes = () => {
-		if (post.likes.length > 0) {
-			return post.likes.find((like) => like === (user?.sub || user?._id)) ? (
+		if (likes.length > 0) {
+			return likes.find((like) => like === userId) ? (
 				<>
 					<ThumbUpAltIcon fontSize="small" />
 					&nbsp;
-					{post.likes.length > 2
-						? `You and ${post.likes.length - 1} others`
-						: `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
+					{likes.length > 2
+						? `You and ${likes.length - 1} others`
+						: `${likes.length} like${likes.length > 1 ? "s" : ""}`}
 				</>
 			) : (
 				<>
 					<ThumbUpAltOutlined fontSize="small" />
-					&nbsp;{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
+					&nbsp;{likes.length} {likes.length === 1 ? "Like" : "Likes"}
 				</>
 			);
 		}
@@ -57,29 +67,19 @@ const Post = ({ post}) => {
 
 	return (
 		<CardStyled raised elevation={5}>
-			<ButtonBaseStyled onClick={openPost}>
+			<CardActionArea onClick={openPost}>
 				<CardMediaStyled
 					image={post.selectedFile}
-					title={post.title}
+					alt={post.title}
 				></CardMediaStyled>
+
 				<Overlay>
 					<Typography variant="h6">{post.name}</Typography>
 					<Typography variant="body2">
 						{moment(post.createdAt).fromNow()}
 					</Typography>
 				</Overlay>
-				<Overlay2>
-					{(user?.sub === post.creator || user?._id === post.creator) && (
-						<Button
-							style={{ color: "white" }}
-							size="small"
-							onClick={() => dispatch(setId(post._id))}
-						>
-							<EditIcon fontSize="small" />
-							&nbsp;Edit
-						</Button>
-					)}
-				</Overlay2>
+				<Overlay2></Overlay2>
 				<Details>
 					<Typography variant="body2" color="textSecondary">
 						{post.tags.map((tag) => `#${tag} `)}
@@ -93,25 +93,36 @@ const Post = ({ post}) => {
 						{post.message}
 					</Title>
 				</CardContent>
-			</ButtonBaseStyled>
+			</CardActionArea>
+
 			<CardActionsStyled>
 				<Button
 					size="small"
 					color="primary"
 					disabled={!user?.name}
-					onClick={() => dispatch(likePost(post._id))}
+					onClick={handleLike}
 				>
 					<Likes />
 				</Button>
 				{(user?.sub === post.creator || user?._id === post.creator) && (
-					<Button
-						size="small"
-						color="primary"
-						onClick={() => dispatch(deletePost(post._id))}
-					>
-						<DeleteIcon fontSize="small" />
-						Delete
-					</Button>
+					<>
+						<Button
+							color="primary"
+							size="small"
+							onClick={() => dispatch(setId(post._id))}
+						>
+							<EditIcon fontSize="small" />
+							&nbsp;Edit
+						</Button>
+						<Button
+							size="small"
+							color="primary"
+							onClick={() => dispatch(deletePost(post._id))}
+						>
+							<DeleteIcon fontSize="small" />
+							Delete
+						</Button>
+					</>
 				)}
 			</CardActionsStyled>
 		</CardStyled>

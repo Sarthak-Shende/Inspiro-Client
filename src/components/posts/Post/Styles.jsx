@@ -1,11 +1,5 @@
 import styled from "@emotion/styled";
-import {
-	Card,
-	CardMedia,
-	Typography,
-	CardActions,
-	ButtonBase,
-} from "@mui/material";
+import { Card, CardMedia, Typography, CardActions } from "@mui/material";
 
 export const CardMediaStyled = styled(CardMedia)`
 	height: 0;
@@ -60,12 +54,6 @@ export const Title = styled(Typography)`
 `;
 
 export const CardActionsStyled = styled(CardActions)`
-	padding: 0 16px 8px 16px;
-	display: flex;
-	justify-content: space-between;
-`;
-
-export const ButtonBaseStyled = styled(ButtonBase)`
 	padding: 0 16px 8px 16px;
 	display: flex;
 	justify-content: space-between;

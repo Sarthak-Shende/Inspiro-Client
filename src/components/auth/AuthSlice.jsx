@@ -4,16 +4,16 @@ import { signinAPI, signupAPI } from "../../api";
 const initialState = {
 	auth: null,
 	status: "idle",
-	error: null, // Your initial state value
-	// ...other state properties if needed
+	error: null,
 };
 
 export const signin = createAsyncThunk(
 	"user/signin",
-	async (formData, navigate) => {
+	async ({ formData, navigate }) => {
 		try {
 			const response = await signinAPI(formData);
-			response.result.token=response.token;
+			navigate("/");
+			response.result.token = response.token;
 			return response.result;
 		} catch (error) {
 			console.log(error);
@@ -23,9 +23,10 @@ export const signin = createAsyncThunk(
 
 export const signup = createAsyncThunk(
 	"user/signup",
-	async (formData, navigate) => {
+	async ({ formData, navigate }) => {
 		try {
 			const response = await signupAPI(formData);
+			navigate("/");
 			response.result.token = response.token;
 			return response.result;
 		} catch (error) {
@@ -35,12 +36,11 @@ export const signup = createAsyncThunk(
 );
 
 const authSlice = createSlice({
-	name: "auth", // A unique name for this slice of state
+	name: "auth", 
 
-	initialState, // The initial state value
+	initialState, 
 
 	reducers: {
-		// Define reducers for handling actions
 		fetchProfile(state, action) {
 			state.value = action.payload;
 			localStorage.setItem("profile", JSON.stringify(action.payload));

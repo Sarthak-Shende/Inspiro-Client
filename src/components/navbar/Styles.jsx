@@ -6,7 +6,7 @@ export const StyledAppBar = styled(AppBar)`
 	margin: 30px 0;
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 `;
 
@@ -19,30 +19,34 @@ export const Image = styled.img`
 `;
 
 export const BrandContainer = styled.div`
-	display: "flex";
-	alignitems: "center";
+	display: flex;
+	align-items: center;
+	margin-left: 20px;
 `;
 
 export const StyledToolbar = styled(Toolbar)`
-	display: "flex";
-	justifycontent: "flex-end";
-	width: "400px";
+	display: flex;
+	justify-content: flex-end;
 `;
 
 export const Profile = styled.div`
-	display: "flex";
-	justifycontent: "space-between";
-	width: "400px";
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 0 10px;
 `;
 
 export const StyledAvatar = styled(Avatar)`
 	color: theme.palette.getContrastText(deepPurple[500]);
 	backgroundcolor: deepPurple[500];
+	margin-right: 20px;
 `;
 
 export const Username = styled(Typography)`
-	display: "flex";
-	alignitems: "center";
+	display: flex;
+	alignitems: center;
+	textalign: center;
+	margin-right: 20px;
 `;
 
 export const LogoutButton = styled(Button)`

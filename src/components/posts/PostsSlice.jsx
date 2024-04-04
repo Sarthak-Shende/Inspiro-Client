@@ -17,14 +17,12 @@ const initialState = {
 	numberOfPages: null,
 	id: null,
 	status: "idle",
-	error: null, // Your initial state value
-	// ...other state properties if needed
+	error: null, 
 };
 
 export const fetchPost = createAsyncThunk("posts/fetchPost", async (id) => {
 	try {
 		const response = await fetchPostAPI(id);
-		//console.log(response);
 		return response;
 	} catch (error) {
 		console.log(error);
@@ -34,7 +32,6 @@ export const fetchPost = createAsyncThunk("posts/fetchPost", async (id) => {
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async (page) => {
 	try {
 		const response = await fetchPostsAPI(page);
-		//console.log(response);
 		return response;
 	} catch (error) {
 		console.log(error);
@@ -46,7 +43,6 @@ export const fetchPostsBySearch = createAsyncThunk(
 	async (searchQuery) => {
 		try {
 			const response = await fetchPostsBySearchAPI(searchQuery);
-			//console.log(response);
 			return response;
 		} catch (error) {
 			console.log(error);
@@ -111,21 +107,10 @@ export const commentPost = createAsyncThunk(
 );
 
 const postsSlice = createSlice({
-	name: "posts", // A unique name for this slice of state
-
-	initialState, // The initial state value
+	name: "posts", 
+	initialState, 
 
 	reducers: {
-		// Define reducers for handling actions
-		fetchAll(state) {
-			state.value += 1;
-		},
-		create(state) {
-			state.value -= 1;
-		},
-		incrementByAmount(state, action) {
-			state.value += action.payload;
-		},
 		setId(state, action) {
 			state.id = action.payload;
 		},
@@ -187,9 +172,11 @@ const postsSlice = createSlice({
 			})
 			.addCase(updatePost.fulfilled, (state, action) => {
 				state.status = "succedded";
-				state.posts = state.posts.map((post) =>
-					post._id === action.payload._id ? action.payload : post
+				const updatedPost = action.payload;
+				const postIndex = state.posts.findIndex(
+					(post) => post._id === updatedPost._id
 				);
+				state.posts[postIndex] = updatedPost;
 				state.error = null;
 			})
 			.addCase(updatePost.rejected, (state, action) => {
@@ -213,9 +200,11 @@ const postsSlice = createSlice({
 			})
 			.addCase(likePost.fulfilled, (state, action) => {
 				state.status = "succedded";
-				state.posts = state.posts.map((post) =>
-					post._id === action.payload._id ? action.payload : post
+				const updatedPost = action.payload;
+				const postIndex = state.posts.findIndex(
+					(post) => post._id === updatedPost._id
 				);
+				state.posts[postIndex] = updatedPost;
 				state.error = null;
 			})
 			.addCase(likePost.rejected, (state, action) => {

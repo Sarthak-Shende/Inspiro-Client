@@ -1,16 +1,9 @@
 import styled from "@emotion/styled";
-import { Paper } from "@mui/material";
-
-/* export const RootContainer = styled.div`
-	"& .muitextfield-root": {
-		margin: theme.spacing(1);
-	}
-`;
-*/
+import { Paper, Button, Input } from "@mui/material";
 
 export const PaperStyled = styled(Paper)`
 	.MuiTextField-root {
-		margin: 2rem};
+		margin: 0.3rem};
 	}
 `;
 
@@ -20,11 +13,12 @@ export const FormContainer = styled.form`
 	justify-content: center;
 `;
 
-export const FileInput = styled.input`
-	width: 97%;
-	margin: 10px 0;
+export const FileInput = styled(Input)`
+	background-color: #088d96;
+	color: white;
+	margin-bottom: 5px;
 `;
 
-export const SubmitButton = styled.button`
-	margin-bottom: 10px;
+export const SubmitButton = styled(Button)`
+	margin-bottom: 5px;
 `;

@@ -6,15 +6,13 @@ import { Grid, CircularProgress } from "@mui/material";
 
 const Posts = () => {
 	const { posts, status } = useSelector(selectPosts);
-	if (status === "succedded" && !posts) {
+	if (status === "succedded" && !posts.length) {
 		return <p>No Posts</p>;
-	}
-	if (status === "loading") {
+	} else if (status === "loading" && !posts.length) {
 		return <CircularProgress></CircularProgress>;
 	} else if (status === "failed") {
-		return <p>Error fetching posts: {error}</p>; // Handle errors
-	}
-	if (posts) {
+		return <p>Error fetching posts: {error}</p>;
+	} else {
 		return (
 			<Grid container alignItems="stretch" spacing={3}>
 				{posts.map((post) => (
@@ -24,8 +22,6 @@ const Posts = () => {
 				))}
 			</Grid>
 		);
-	} else {
-		return <CircularProgress></CircularProgress>;
 	}
 };
 

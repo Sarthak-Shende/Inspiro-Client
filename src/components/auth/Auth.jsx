@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Container, Typography, Grid, Button } from "@mui/material";
-import { StyledPaper, StyledAvatar, Form, SubmitButton } from "./Styles";
+import { StyledPaper, Form, SubmitButton } from "./Styles";
 import Input from "./Input";
-import LockIcon from "@mui/icons-material/Lock";
 import { GoogleLogin } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
@@ -28,9 +27,9 @@ const Auth = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (isSignup) {
-			dispatch(signup(formData, navigate));
+			dispatch(signup({ formData, navigate }));
 		} else {
-			dispatch(signin(formData, navigate));
+			dispatch(signin({ formData, navigate }));
 		}
 	};
 
@@ -50,7 +49,7 @@ const Auth = () => {
 
 	const googleSuccess = async (response) => {
 		let data = jwtDecode(response?.credential);
-		data.token=response?.credential;
+		data.token = response?.credential;
 
 		try {
 			dispatch(fetchProfile(data));
@@ -68,9 +67,6 @@ const Auth = () => {
 		<>
 			<Container component="main" maxWidth="xs">
 				<StyledPaper elevation={3}>
-					<StyledAvatar>
-						<LockIcon />
-					</StyledAvatar>
 					<Typography variant="h5">
 						{isSignup ? "Sign up" : "Sign in"}
 					</Typography>
@@ -123,7 +119,7 @@ const Auth = () => {
 							{isSignup ? "Sign Up" : "Sign In"}
 						</SubmitButton>
 						<GoogleLogin onSuccess={googleSuccess} onError={googleFailure} />
-						<Grid Container justify="flex-end">
+						<Grid container justify="center">
 							<Grid item>
 								<Button onClick={switchMode}>
 									{isSignup

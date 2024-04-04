@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
 	fetchPost,
 	selectPosts,
@@ -27,7 +27,6 @@ import CommentSection from "./CommentSection";
 const PostDetails = () => {
 	const { post, posts, status } = useSelector(selectPosts);
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 	const { id } = useParams();
 
 	useEffect(() => {
@@ -55,15 +54,15 @@ const PostDetails = () => {
 	const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
 
 	return (
-		<Paper>
+		<Paper style={{ padding: "20px", borderRadius: "15px" }} elevation={6}>
 			<StyledCard>
 				<StyledSection>
-					<Typography variant="h3" component="h2">
+					<Typography variant="h4" component="h1">
 						{post.title}
 					</Typography>
 					<Typography
 						gutterBottom
-						variant="h6"
+						variant="subtitle2"
 						color="textSecondary"
 						component="h2"
 					>
@@ -72,26 +71,17 @@ const PostDetails = () => {
 					<Typography gutterBottom variant="body1" component="p">
 						{post.message}
 					</Typography>
-					<Typography variant="h6">Created by: {post.name}</Typography>
-					<Typography variant="body1">
+					<Typography variant="subtitle1">Created by: {post.name}</Typography>
+					<Typography variant="subtitle2">
 						{moment(post.createdAt).fromNow()}
 					</Typography>
-					<Divider style={{ margin: "20px 0" }} />
-					<Typography variant="body1">
-						<strong>Realtime Chat - coming soon!</strong>
-					</Typography>
+
 					<Divider style={{ margin: "20px 0" }} />
 					<CommentSection></CommentSection>
 					<Divider style={{ margin: "20px 0" }} />
 				</StyledSection>
 				<StyledImageSection>
-					<StyledImg
-						src={
-							post.selectedFile ||
-							"https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png"
-						}
-						alt={post.title}
-					/>
+					<StyledImg src={post.selectedFile} alt={post.title} />
 				</StyledImageSection>
 			</StyledCard>
 			{recommendedPosts && (
@@ -100,7 +90,6 @@ const PostDetails = () => {
 						<Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
 							<Post post={post}></Post>
 						</Grid>
-						//setCurrentId={setCurrentId}
 					))}
 				</Grid>
 			)}

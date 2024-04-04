@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommentsOuterContainer, CommentsInnerContainer } from "./Styles";
 import { Typography, TextField, Button } from "@mui/material";
@@ -12,7 +12,6 @@ const CommentSection = () => {
 	const [comment, setComment] = useState("");
 
 	const user = JSON.parse(localStorage.getItem("profile"));
-	const commentsRef = useRef();
 
 	const handleClick = () => {
 		const finalComment = `${user.name}: ${comment}`;
@@ -23,7 +22,6 @@ const CommentSection = () => {
 
 	useEffect(() => {
 		setComments(post?.comments || []);
-		commentsRef.current.scrollIntoView({ behaviour: "smooth" });
 	}, [post]);
 
 	return (
@@ -39,7 +37,6 @@ const CommentSection = () => {
 							{comment.split(":")[1]}
 						</Typography>
 					))}
-					<div ref={commentsRef} />
 				</CommentsInnerContainer>
 				{user && (
 					<div style={{ width: "70%" }}>

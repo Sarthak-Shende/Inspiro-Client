@@ -1,5 +1,5 @@
 import { TextField, Button, Typography } from "@mui/material";
-import { FormContainer, FileInput, SubmitButton, PaperStyled } from "./Styles";
+import { FormContainer, SubmitButton, FileInput, PaperStyled } from "./Styles";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, selectPosts, updatePost } from "../posts/PostsSlice";
@@ -7,7 +7,6 @@ import { setId } from "../posts/PostsSlice";
 import { useNavigate } from "react-router-dom";
 
 const Form = () => {
-	//{ currentId, setCurrentId }
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { id } = useSelector(selectPosts);
@@ -42,7 +41,9 @@ const Form = () => {
 				})
 			);
 		} else {
-			dispatch(createPost({post:{ ...postData, name: user.name },navigate}));
+			dispatch(
+				createPost({ post: { ...postData, name: user.name }, navigate })
+			);
 		}
 
 		clear();
@@ -110,12 +111,18 @@ const Form = () => {
 					}
 				/>
 				<div>
-					<FileInput type="file" onChange={handleFileChange}></FileInput>
+					<FileInput
+						type="file"
+						fullWidth
+						color="primary"
+						disableUnderline
+						onChange={handleFileChange}
+					></FileInput>
 				</div>
 				<SubmitButton
 					variant="contained"
 					color="primary"
-					size="large"
+					size="small"
 					type="submit"
 					fullWidth
 				>

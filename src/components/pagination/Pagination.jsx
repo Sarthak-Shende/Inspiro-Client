@@ -1,22 +1,20 @@
-import { Button, Pagination, PaginationItem } from "@mui/material";
+import { Pagination, PaginationItem } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "../posts/PostsSlice";
 import { selectPosts } from "../posts/PostsSlice";
-import { useNavigate } from "react-router-dom";
 
-const Paginate = (page) => {
+const Paginate = ( page ) => {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 	const { numberOfPages } = useSelector(selectPosts);
-
+	
 	useEffect(() => {
-		if (page) {
+		if (page.page) {
 			dispatch(fetchPosts(page));
 		}
-	}, [page]);
-
+	}, [page.page]);
+	console.log(page.page);
 	return (
 		<Pagination
 			count={numberOfPages}

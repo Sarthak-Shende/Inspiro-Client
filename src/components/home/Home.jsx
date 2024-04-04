@@ -11,8 +11,8 @@ import { StyledAppBar, SearchButton } from "./Styles";
 import Posts from "../posts/Posts";
 import Form from "../form/Form";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { fetchPosts, fetchPostsBySearch } from "../posts/PostsSlice";
+import { useState } from "react";
+import { fetchPostsBySearch } from "../posts/PostsSlice";
 import Pagination from "../pagination/Pagination";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -22,19 +22,13 @@ function useQuery() {
 const Home = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [currentId, setCurrentId] = useState(null);
 	const [search, setSearch] = useState("");
 	const [tags, setTags] = useState([]);
 	const query = useQuery();
 
 	const page = query.get("page") || 1;
 	const searchQuery = query.get("searchQuery");
-	const handleKeyPressSearch = (e) => {
-		if (e.key === "Enter") {
-			searchPost();
-		}
-	};
-
+	
 	const handleAdd = (tag) => {
 		if (!tags.includes(tag)) {
 			setTags([...tags, tag]);
@@ -72,7 +66,7 @@ const Home = () => {
 					spacing="3"
 				>
 					<Grid item xs={12} sm={6} md={9}>
-						<Posts setCurrentId={setCurrentId} />
+						<Posts />
 					</Grid>
 
 					<Grid item xs={12} sm={6} md={3}>
@@ -84,7 +78,6 @@ const Home = () => {
 								fullWidth
 								value={search}
 								onChange={(e) => setSearch(e.target.value)}
-								onKeyDown={handleKeyPressSearch}
 							/>
 							<TextField
 								name="tags"
@@ -112,7 +105,9 @@ const Home = () => {
 								Search
 							</SearchButton>
 						</StyledAppBar>
-						<Form currentId={currentId} setCurrentId={setCurrentId} />
+						<br />
+						<Form />
+						<br />
 						{!searchQuery && !tags.length && (
 							<Paper elevation={6}>
 								<Pagination page={page} />
