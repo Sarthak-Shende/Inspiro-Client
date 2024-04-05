@@ -9,7 +9,6 @@ import {
 	Username,
 	StyledAvatar,
 } from "./Styles";
-import inspiroLogo from "../../images/Inspiro_only_logo.jpg";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useState, useEffect } from "react";
@@ -51,7 +50,7 @@ const Navbar = () => {
 				<Heading component={Link} to="/" variant="h2" align="center">
 					Inspiro
 				</Heading>
-				<Image src={inspiroLogo} alt="inspiro" height="60" />
+				<Image src={'https://i.ibb.co/GFnY9B3/Inspiro-only-logo.jpg'} alt="inspiro" height="60" />
 			</BrandContainer>
 			<StyledToolbar>
 				{user ? (
