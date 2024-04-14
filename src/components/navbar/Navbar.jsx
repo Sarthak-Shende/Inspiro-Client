@@ -8,7 +8,7 @@ import {
 	LogoutButton,
 	Username,
 	StyledAvatar,
-} from "./Styles";
+} from "./Styles";                                                 
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useState, useEffect } from "react";
