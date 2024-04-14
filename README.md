@@ -62,19 +62,19 @@ Inspiro is a vibrant online platform designed specifically for creative professi
 </ul>
 <br>
 <h2>Landing page</h2>
-<img src="./assets/LandingPage.gif" alt="Landing page">
+<img src="/assets/LandingPage.gif" alt="Landing page">
 <br>
 <h2>Authentication page</h2>
-<img src="./assets/Auth.gif" alt="Authentication page">
+<img src="/assets/Auth.gif" alt="Authentication page">
 <br>
 <h2>Post details page</h2>
-<img src="./assets/ProductDetails.gif"  alt="Post details page">
+<img src="/assets/ProductDetails.gif"  alt="Post details page">
 <br>
 <h2>Post actions</h2>
-<img src="./assets/PostActions.gif" alt= "Post actions">
+<img src="/assets/PostActions.gif" alt= "Post actions">
 <br>
 <h2>Creating a post</h2>
-<img src="./assets/Createpost.gif"  alt="Creating a post">
+<img src="/assets/Createpost.gif"  alt="Creating a post">
 <br>
 <h2>On smartphone</h2>
 <img src="https://i.ibb.co/xYygJ1j/Screenshot-from-2024-04-14-17-36-55.png"  alt="On smartphone">
